@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RoboMirror</title>
+  <link rel="stylesheet" href="css/github-style.css">
+  <style type="text/css">
+    body {
+      margin:20px 30px;
+    }
+    li {
+      margin: 7px 0;
+    }
+  </style>
+</head>
+<body>
+<div style="display: block;" class="markdown-body display-none">
+
+<p style="text-align: right;">Martin Kinkelin, August 24 2014</p>
+
+<h1>RoboMirror</h1>
+
+<p>RoboMirror is a GUI front-end for the quite popular <code>Robocopy.exe</code> command-line
+utility for Windows.</p>
+
+<blockquote>
+<p><strong>Robocopy</strong> is shipped with Windows since Vista and available as free SDK tool for
+previous Windows versions (RoboMirror already includes it).<br>
+It allows to robustly synchronize two directory trees, both locally
+and across the network. It is therefore often used for mirroring purposes,
+e.g., as a powerful yet free backup utility.</p>
+</blockquote>
+
+<p><img alt="Screenshot" src="img/MainForm.png" style="max-width:100%;"></p>
+
+<p><strong>RoboMirror</strong>'s aim is to make Robocopy more accessible by providing a very
+simple and user-centered GUI, because most users simply don't want to
+work directly with the console or are overwhelmed by Robocopy's flexibility.</p>
+
+<p>Additionally, RoboMirror supports <strong>volume shadow copies</strong>. This allows to copy files
+locked by running processes (Outlook, SQL Server...).</p>
+
+<h2>Download</h2>
+
+<p><strong>Requirements</strong>:</p>
+
+<ul>
+<li><p>Windows XP/Server 2003 or newer</p></li>
+<li><p><a href="http://www.microsoft.com/net/downloads">.NET Framework</a> 4.0</p></li>
+</ul>
+
+<p><a href="https://sourceforge.net/projects/robomirror/files/" style="font-size: 16px; font-weight: bold;">Download page</a></p>
+<p><a href="https://sourceforge.net/projects/robomirror/" style="font-size: 16px; font-weight: bold;">SourceForge page</a></p>
+
+<h2>What's new?</h2>
+
+<h3>v2.0</h3>
+
+<ul>
+<li><p><strong>Mirror operations queue</strong>. RoboMirror now allows you to add additional mirror operations to a queue for batch processing. You can also let RoboMirror shut the system down as soon as the queue has been processed.</p></li>
+<li><p>Upgraded to <strong>.NET 4.0</strong></p></li>
+<li><p>Improved log system wrt. scalability and robustness</p></li>
+</ul>
+
+<h3>v1.3</h3>
+
+<ul>
+<li><p><strong>Volume shadow copies for all Windows versions since and including XP</strong>. RoboMirror now handles the shadow copies itself and doesn't rely on Microsoft's vshadow.exe tool anymore.</p></li>
+<li><p>Volume shadow copies are created with VSS writer involvement to ensure a consistent state of each file</p></li>
+<li><p>Very rough progress estimate displayed in the context menu of an operation's task tray icon</p></li>
+<li><p>Various minor improvements as side-effects of internal code refactoring</p></li>
+</ul>
+
+<h3>v1.2</h3>
+
+<ul>
+<li><p>New: Warn about mismatched items (e.g., a new file in the source tree colliding with an existing folder with the same name in the destination tree)</p></li>
+<li><p>Extended statistics after a simulation run</p></li>
+<li><p>Changed <code>Last backup</code> time stamp to <code>Last successful operation</code></p></li>
+</ul>
+
+<h3>v1.1 - 'The flexibility booster' ;)</h3>
+
+<ul>
+<li><p>New <code>Overwrite newer files</code> option for mirror tasks. This allows for <strong>two-way synchronization</strong>, see below.</p></li>
+<li><p>New: Power users may use custom basic Robocopy switches instead of the default ones. This makes RoboMirror very flexible!</p></li>
+<li><p>New: If the <code>Use a volume shadow copy</code> option is used for a restore operation, a shadow copy of the target volume will be created.</p></li>
+</ul>
+
+<h3>v1.0.1</h3>
+
+<ul>
+<li><p>Fix bug when selecting a root directory as source or target folder</p></li>
+<li><p>Fix erroneous detection of files &amp; folders to be deleted</p></li>
+</ul>
+
+<h3>v1.0 compared to v0.6</h3>
+
+<ul>
+<li><p>Fix very silly bug crashing the app when the simulation run revealed no pending changes</p></li>
+<li><p>Update dependencies (<code>vshadow.exe</code> to v3.0, <code>Microsoft.Win32.TaskScheduler.dll</code> to v2.2)</p></li>
+<li><p>Split excluded items into excluded files and excluded subfolders with dedicated wildcards (NEW: wildcards for subfolders)</p></li>
+<li><p>Improve UAC support: RoboMirror doesn't require administrator rights anymore, but some advanced features do, see below</p></li>
+<li><p>Add drag &amp; drop support for folder textboxes and excluded items</p></li>
+<li><p>New default Robocopy switches, see below</p></li>
+<li><p>Volume shadow copies are now created with the no-writer option</p></li>
+<li><p>RoboMirror XML files for mirror tasks &amp; log have been moved from <code>%APPDATA%\RoboMirror</code> to <code>%LOCALAPPDATA%\RoboMirror</code></p></li>
+<li><p>Scheduled tasks are created in <code>RoboMirror</code> subfolder for Windows Vista and newer</p></li>
+<li><p>UI tweaks</p></li>
+<li><p>New &amp; improved installer based on Inno Setup</p></li>
+</ul>
+
+<h2>Features</h2>
+
+<ul>
+<li>
+<p><strong>Very simple graphical interface</strong></p>
+
+<p>Simplicity was one of the primary goals as I started coding this little
+application when my mum asked me for a simple backup tool. I was not
+able to find something I was looking for, so I started this project with
+the aim to be as simple as possible while still providing for what
+most users need, e.g., performing backups of folders to external hard
+drives or network shares, synchronizing an MP3 player with the music
+folder etc.</p>
+</li>
+<li>
+<p><strong>Managing mirror tasks</strong></p>
+
+<p>RoboMirror is based on a set of mirror tasks. A mirror task consists in
+a source folder and a target folder.</p>
+
+<p><img alt="Screenshot" src="img/TaskDialog.png" style="max-width:100%;"></p>
+
+<p>When performing a backup, new and modified files &amp; folders in the
+source folder will be copied to the target folder.<br>
+When performing a restore operation, the operation is reversed by swapping
+source and target folders, i.e., new and differing files &amp; folders in
+the target folder will be copied to the source folder.</p>
+
+<p>The <code>Overwrite newer files</code> option controls whether newer files
+in the target (<em>restore operation</em>: source) folder are to be overwritten by
+older ones from the source (<em>restore operation</em>: target) folder.
+
+<p>Files &amp; folders which exist in the target (<em>restore operation</em>: source)
+folder but not in the source (<em>restore operation</em>: target) folder, so-called
+<strong>extra files &amp; folders</strong>, can optionally be deleted to create an identical mirror.</p>
+</li>
+<li>
+<p><strong>Two-way synchronization</strong></p>
+
+<p>Performing a two-way synchronization is admittedly a bit clumsy, but oversimplifying it can easily result in bad surprises.</p>
+
+<p><strong>Scenario</strong>: Both folders are to contain <strong>all files</strong> and the latest version of each file.</p>
+
+    <ol>
+    <li>Make sure to disable both <code>Overwrite newer files</code> and
+    <code>Delete extra files and folders</code> options for the desired task.</li>
+    <li>Perform a <strong>backup</strong> operation. This will copy all new and newer files &amp; folders from the
+    source folder to the target folder.</li>
+    <li>Then perform a <strong>restore</strong> operation. This will copy all new and newer files &amp; folders from the
+    target folder to the source folder.</li>
+    </ol>
+
+</li>
+<li>
+<p><strong>Extended NTFS attributes</strong></p>
+
+<p>Besides copying file data, attributes and time stamps, RoboMirror can also
+copy extended NTFS attributes, either only the access control lists (ACLs) or
+everything (ACLs, owner and auditing information).</p>
+</li>
+<li>
+<p><strong>Excluding files &amp; folders</strong></p>
+
+<p>Entire subfolders, files and wildcards in the source (<em>restore operation</em>: target)
+folder may be excluded from synchronization.<br>
+Additionally, files may be excluded by any of the common attributes (Hidden, System and Encrypted).</p>
+
+<p><img alt="Screenshot" src="img/ExcludedItemsDialog.png" style="max-width:100%;"></p>
+
+<p>A wildcard excludes all matching items in the source (<em>restore operation</em>: target)
+folder <strong>and in all of its subfolders</strong>!<br>
+Due to Robocopy limitations, wildcards cannot include any path information, e.g., <code>\MySubfolder\*.bak</code> is
+not a valid wildcard.</p>
+
+</li>
+<li>
+<p><strong>Simulation run</strong> to identify the pending changes which are then presented
+to the user, asking for confirmation. This should prevent unpleasant
+surprises. ;)</p>
+
+<p><img alt="Screenshot" src="img/Preview.png" style="max-width:100%;"></p>
+</li>
+<li>
+<p><strong>Scheduling backups</strong></p>
+
+<p>Backup tasks may be scheduled on a regular basis (daily, weekly and
+monthly at a given time).</p>
+
+<p><img alt="Screenshot" src="img/ScheduleTaskDialog.png" style="max-width:100%;"></p>
+
+<p>Scheduled RoboMirror tasks require an interactive session, so the user needs to be
+logged on. The tasks are scheduled such that they are executed automatically as soon as possible if
+a scheduled start has been missed (e.g., because the machine was powered off or the user
+wasn't logged on).</p>
+
+<blockquote>
+<p><strong>Tip</strong>: If a backup task is scheduled via RoboMirror running as administrator,
+the scheduled task will be executed as administrator and not cause any UAC prompt!</p>
+</blockquote>
+
+</li>
+<li>
+<p><strong>Logging and task history</strong></p>
+
+<p>All manually started and scheduled operations are logged, including the
+full Robocopy output. The complete history of a mirror task may be
+displayed for further analysis.</p>
+
+<p><img alt="Screenshot" src="img/History.png" style="max-width:100%;"></p>
+</li>
+<li>
+<p><strong>Volume shadow copies</strong></p>
+
+<p>By creating a temporary shadow copy of the source (<em>restore operation</em>: target)
+volume and copying from that shadow copy, all files can be copied, including files locked by
+running processes (e.g., Outlook locking its <code>.pst</code> files, SQL server its
+databases).</p>
+
+<p>This is accomplished using the handy <a href="http://alphavss.codeplex.com/">AlphaVSS</a> open-source library.
+A non-persistent shadow copy snapshot (a.k.a. <em>System Restore point</em>) of the source
+(<em>restore operation</em>: target) volume will be created and mounted as network share.
+As soon as the mirror operation is finished, the shadow copy is deleted.</p>
+</li>
+</ul>
+
+<h2>Features requiring elevated privileges</h2>
+
+<ul>
+<li><p><strong>Volume shadow copy</strong> to copy files locked by running processes</p></li>
+<li><p><strong>Robocopy backup mode</strong> <code>/zb</code> or <code>/b</code> to copy files the user has no direct access to</p></li>
+<li><p>Copying extended <strong>NTFS owner and auditing information</strong> <code>/copyall</code> or <code>/copy:datsou</code></p></li>
+</ul>
+
+<p>In order to use these features, the user needs to be in the <code>Backup Operators</code>
+or in the <code>Administrators</code> group. In the latter case, Robomirror needs
+to be run as administrator if using Windows Vista or newer and UAC is enabled.</p>
+
+<h2>Which basic Robocopy switches are used?</h2>
+
+<pre><code>/z[b] /e /fft /r:12 /w:5 /tbd /np
+</code></pre>
+
+<p>Use Robocopy restartable mode (with backup mode fallback on access denied errors if RoboMirror runs with the required privileges),
+include empty folders, assume FAT file times (2-second granularity),
+12 retry attempts with 5 seconds delay, wait for network shares to be defined,
+no detailed progress output.</p>
+
+<p>You may modify the default switches to your liking by editing the file <code>RoboMirror.exe.config</code>
+in the application directory (e.g., <code>C:\Program Files\RoboMirror\RoboMirror.exe.config</code>). It is an
+XML file, open it with your favourite text editor.</p>
+
+<p>In that file you may also disable the simulation run if you feel confident
+and want to save some seconds and a mouse click when performing a backup.</p>
+
+</div>
+</body></html>
